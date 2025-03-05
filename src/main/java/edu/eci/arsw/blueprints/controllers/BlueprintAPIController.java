@@ -2,15 +2,12 @@ package edu.eci.arsw.blueprints.controllers;
 
 import edu.eci.arsw.blueprints.model.Blueprint;
 import edu.eci.arsw.blueprints.persistence.BlueprintNotFoundException;
+import edu.eci.arsw.blueprints.persistence.BlueprintPersistenceException;
 import edu.eci.arsw.blueprints.services.BlueprintsServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
@@ -29,17 +26,12 @@ public class BlueprintAPIController {
     public ResponseEntity<?> getAllBlueprints(
             @RequestParam(value = "filter", required = false, defaultValue = "") String filterType) {
         try {
-            // Get all blueprints with optional filtering
             Set<Blueprint> allBlueprints = services.getAllBlueprints(filterType);
-
-            // Return the blueprints with OK status
             return new ResponseEntity<>(allBlueprints, HttpStatus.OK);
         } catch (BlueprintNotFoundException e) {
-            // If no blueprints are found, return NOT_FOUND status
-            return new ResponseEntity<>("No blueprints found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            // Handle any other unexpected errors
-            return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -48,16 +40,11 @@ public class BlueprintAPIController {
             @PathVariable String author,
             @RequestParam(value = "filter", required = false, defaultValue = "") String filterType) {
         try {
-            // Get blueprints for the specific author with optional filtering
             Set<Blueprint> authorBlueprints = services.getBlueprintsByAuthor(author, filterType);
-
-            // Return the blueprints with OK status
             return new ResponseEntity<>(authorBlueprints, HttpStatus.OK);
         } catch (BlueprintNotFoundException e) {
-            // If no blueprints found for the author, return NOT_FOUND status
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            // Handle any other unexpected errors
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -68,17 +55,85 @@ public class BlueprintAPIController {
             @PathVariable String bpname,
             @RequestParam(value = "filter", required = false, defaultValue = "") String filterType) {
         try {
-            // Get specific blueprint with optional filtering
             Blueprint blueprint = services.getBlueprint(author, bpname, filterType);
-
-            // Return the blueprint with OK status
             return new ResponseEntity<>(blueprint, HttpStatus.OK);
         } catch (BlueprintNotFoundException e) {
-            // If blueprint not found, return NOT_FOUND status
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            // Handle any other unexpected errors
+            return new ResponseEntity<>( HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping()
+    public ResponseEntity<?> createBlueprint(@RequestBody Blueprint blueprint) {
+        try {
+
+            if (blueprint == null) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            if (blueprint.getAuthor() == null || blueprint.getAuthor().isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            if (blueprint.getName() == null || blueprint.getName().isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            if (blueprint.getPoints() == null ) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+
+            services.addNewBlueprint(blueprint);
+
+
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (BlueprintPersistenceException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @PutMapping("/{author}/{bpname}")
+    public ResponseEntity<?> updateBlueprint(
+            @PathVariable String author,
+            @PathVariable String bpname,
+            @RequestBody Blueprint updatedBlueprint) {
+        try {
+
+            if (updatedBlueprint == null) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+
+            if (!author.equals(updatedBlueprint.getAuthor()) ||
+                    !bpname.equals(updatedBlueprint.getName())) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+
+            if (updatedBlueprint.getPoints() == null ) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            services.getBlueprint(author, bpname, "");
+
+
+            services.addNewBlueprint(updatedBlueprint);
+
+
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (BlueprintNotFoundException e) {
+
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (BlueprintPersistenceException e) {
+
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (Exception e) {
+
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
