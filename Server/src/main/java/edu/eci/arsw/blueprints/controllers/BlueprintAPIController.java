@@ -6,12 +6,14 @@ import edu.eci.arsw.blueprints.persistence.BlueprintPersistenceException;
 import edu.eci.arsw.blueprints.services.BlueprintsServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/blueprints")
 public class BlueprintAPIController {
 
@@ -41,7 +43,9 @@ public class BlueprintAPIController {
             @RequestParam(value = "filter", required = false, defaultValue = "") String filterType) {
         try {
             Set<Blueprint> authorBlueprints = services.getBlueprintsByAuthor(author, filterType);
-            return new ResponseEntity<>(authorBlueprints, HttpStatus.OK);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(authorBlueprints);
         } catch (BlueprintNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {

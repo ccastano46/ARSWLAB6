@@ -1,0 +1,48 @@
+Análisis de Concurrencia en BlueprintsRESTAPI
+
+1. Condiciones de Carrera Identificadas
+
+Dado que nuestra API REST en Spring Boot maneja múltiples peticiones simultáneamente, pueden ocurrir condiciones de carrera en las siguientes situaciones:
+
+1. Creación y Modificación de Blueprints: Si dos o más peticiones intentan modificar el mismo blueprint simultáneamente, los cambios pueden perderse o corromperse.
+2. Eliminación Concurrente:Si un cliente elimina un blueprint mientras otro cliente lo está consultando o modificando, puede generarse un estado inconsistente en la aplicación.
+3. Operaciones de Lectura y Escritura: Si una lectura ocurre mientras una escritura está en proceso, se podría obtener un estado inconsistente de los datos.
+
+2. Regiones Críticas Identificadas
+
+Las regiones críticas en la API incluyen:
+
+1. Métodos de Creación y Modificación: Las operaciones que alteran la estructura de datos subyacente (como listas o mapas que almacenan los blueprints).
+2. Métodos de Eliminación: La eliminación de un blueprint debe manejarse con cuidado para evitar que otros hilos accedan a datos inexistentes.
+3. **Consultas que dependen del estado interno: Cualquier operación de lectura que asuma que los datos no cambian mientras se ejecuta puede verse afectada por escrituras concurrentes.
+
+3. Estrategia para Eliminar Condiciones de Carrera
+
+Para mejorar la seguridad sin comprometer el rendimiento, se aplicaron las siguientes estrategias:
+
+1. Uso de `ConcurrentHashMap` para Almacenamiento:
+   - En lugar de utilizar un `HashMap` estándar, se ha reemplazado por un `ConcurrentHashMap`, que permite múltiples accesos concurrentes con bloqueos más finos en la estructura de datos.
+
+2. Uso de `ReadWriteLock` para Acceso Controlado:
+   - Se implementó `ReentrantReadWriteLock` para permitir múltiples lecturas concurrentes mientras bloquea las escrituras.
+
+3. Operaciones Atómicas:
+   - Se usaron métodos de actualización atómicos (`computeIfPresent`, `putIfAbsent`) para garantizar que las modificaciones sean seguras sin bloquear innecesariamente.
+
+4. Estrategia de Copia en Escritura (Copy-on-Write) para Lecturas Consistentes:
+   - En operaciones de consulta, se copian los datos a estructuras inmutables para evitar inconsistencias debidas a modificaciones concurrentes.
+
+4. Código Ajustado
+
+Se realizaron los siguientes cambios en el código:
+
+- Reemplazo de `HashMap` por `ConcurrentHashMap`.
+- Implementación de `ReadWriteLock` para sincronizar lecturas y escrituras de forma eficiente.
+- Uso de operaciones atómicas en lugar de bloques `synchronized` para minimizar bloqueos.
+
+Estos ajustes permiten que la API maneje múltiples solicitudes concurrentes sin generar condiciones de carrera significativas y sin degradar el rendimiento innecesariamente.
+
+## 5. Conclusión
+
+La API ahora es capaz de manejar concurrencia de manera eficiente gracias a la combinación de estructuras concurrentes y bloqueos controlados. Se recomienda realizar pruebas de carga con herramientas como JMeter o Gatling para verificar el comportamiento bajo alta concurrencia.
+

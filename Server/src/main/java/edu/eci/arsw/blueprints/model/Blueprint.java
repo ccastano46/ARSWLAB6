@@ -15,10 +15,13 @@ public class Blueprint {
 
     private String name=null;
 
+    private int numberPoints;
+
     public Blueprint(String author,String name,Point[] pnts){
         this.author=author;
         this.name=name;
         points=Arrays.asList(pnts);
+        numberPoints = pnts.length;
     }
 
     public Blueprint(String author, String name){
@@ -41,8 +44,12 @@ public class Blueprint {
         return points;
     }
 
+    public int getNumberPoints() {return numberPoints;}
+
+
     public void addPoint(Point p){
         this.points.add(p);
+        this.numberPoints++;
     }
 
     @Override
