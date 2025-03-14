@@ -33,12 +33,21 @@ public class InMemoryBlueprintPersistence implements BlueprintsPersistence {
         Point[] pts6 = new Point[]{ new Point(700, 700), new Point(750, 750), new Point(800, 800) };
         Blueprint bp6 = new Blueprint("author3", "blueprint6", pts6);
 
+        Point[] pts7 = new Point[]{ new Point(0, 0), new Point(400, 0), new Point(200, 300) };
+        Blueprint bp7 = new Blueprint("Camilo", "blueprint7", pts7);
+
+        Point[] pts8 = new Point[]{ new Point(300, 0), new Point(600, 200), new Point(600, 500),
+                new Point(300, 700), new Point(0, 500), new Point(0, 200)};
+        Blueprint bp8 = new Blueprint("Camilo", "blueprint8", pts8);
+
         // Add all blueprints to the map
         blueprints.put(new Tuple<>(bp1.getAuthor(), bp1.getName()), bp1);
         blueprints.put(new Tuple<>(bp2.getAuthor(), bp2.getName()), bp2);
         blueprints.put(new Tuple<>(bp3.getAuthor(), bp3.getName()), bp3);
         blueprints.put(new Tuple<>(bp4.getAuthor(), bp4.getName()), bp4);
         blueprints.put(new Tuple<>(bp5.getAuthor(), bp5.getName()), bp5);
+        blueprints.put(new Tuple<>(bp7.getAuthor(), bp7.getName()), bp7);
+        blueprints.put(new Tuple<>(bp7.getAuthor(), bp8.getName()), bp8);
         blueprints.put(new Tuple<>(bp6.getAuthor(), bp6.getName()), bp6);
     }
 

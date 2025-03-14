@@ -1,0 +1,235 @@
+@import url('https://fonts.googleapis.com/css2?family=Radley:ital@0;1&family=Rubik+Distressed&family=Rubik+Iso&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Radley:ital@0;1&family=Rubik+Dirt&family=Rubik+Distressed&family=Rubik+Iso&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&display=swap');
+/*Reseteo*/
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+blockquote,
+q {
+  quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+div {
+  overflow: hidden;
+}
+
+/*Mobile First*/
+
+:root{
+  --elemntSpace: 20px;
+  --grobalSpace: 10px;
+  --fontForms : "Radley";
+  --fontCaption: "Rubik Distressed";
+  --fontTable: "Libre Caslon Display";
+  --color1: #022F40;
+  --color2: #95B8D1;
+  --color3: #EEFFDB;
+  --color4: #8E4162;
+  --color5: #00779B;
+}
+
+body{
+  padding: var(--elemntSpace);
+  background-color: var(--color1);
+}
+
+h2{
+  font-size: 35px;
+  font-family: var(--fontForms), Serif, serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+caption{
+  font-size: 40px;
+  font-family: var(--fontCaption), system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+form.tracker{
+  margin-bottom: var(--grobalSpace);
+}
+
+div.results{
+  padding:var(--grobalSpace);
+  border: 3px groove var(--color3);
+}
+div.results table.results{
+  margin-bottom: var(--elemntSpace);
+}
+div.results table.results tbody tr button{
+  font-family: var(--fontTable), serif;
+  font-weight: bold;
+  color: var(--color1);
+  background-color: var(--color3);
+}
+
+/*Responsive*/
+
+@media (min-width: 700px){
+  :root{
+    --elemntSpace: 30px;
+    --grobalSpace: 20px;
+  }
+  h2{
+    font-size: 45px;
+  }
+  caption{
+    font-size: 50px;
+  }
+
+  div.results{
+    border: 5px groove var(--color3);
+  }
+  div.results table.results{
+    width: 100%;
+  }
+  div.results table.results tbody td button{
+    font-size: 70%;
+  }
+}
+
+@media (min-width: 1100px){
+  h2{
+    font-size: 55px;
+  }
+  caption{
+    font-size: 60px;
+  }
+
+  div.results{
+    border: 5px groove var(--color3);
+  }
+}
+
+
+
+

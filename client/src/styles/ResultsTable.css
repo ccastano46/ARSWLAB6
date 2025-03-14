@@ -1,0 +1,51 @@
+/*Mobile First*/
+table{
+    border: 3px solid var(--color3);
+}
+
+caption{
+    width: fit-content;
+    color: var(--color3);
+    margin-bottom: var(--elemntSpace);
+}
+
+tr{
+    border-bottom: 3px solid var(--color3);
+}
+
+th, td{
+    padding: var(--grobalSpace);
+    text-align: center;
+    font-family: var(--fontTable), serif;
+    font-size: 18px;
+    font-weight: 400;
+    font-style: normal;
+    color: var(--color3);
+}
+
+th{
+    font-weight: bold;
+}
+
+thead tr{
+    background-color: var(--color5);
+}
+
+
+tbody tr:nth-child(even) {
+    background-color: var(--color5);
+}
+
+
+tbody tr:nth-child(odd) {
+    background-color: var(--color4);
+}
+
+/*Responsive*/
+
+@media (min-width: 700px){
+    th,td{
+        font-size: 25px;
+    }
+}
+
